@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+<title>{% block title %}General Settings{% endblock %}</title>
+
+{% block content %}
+
+<style>
+  .sidebar {
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: #343a40;
+    position: absolute;
+    left: 0;
+    height: 100%;
+    overflow: auto;
+  }
+
+  .sidebar a {
+    display: block;
+    color: #ffffff;
+    padding: 16px;
+    text-decoration: none;
+  }
+
+  .sidebar a.active {
+    background-color: #ffffff;
+    color: white;
+  }
+
+  .sidebar a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+  }
+
+  div.content {
+    margin-left: 200px;
+    padding: 1px 16px;
+    height: 1000px;
+  }
+
+  @media screen and (max-width: 700px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+    .sidebar a {
+      float: left;
+    }
+    div.content {
+      margin-left: 0;
+    }
+  }
+
+  @media screen and (max-width: 400px) {
+    .sidebar a {
+      text-align: center;
+      float: none;
+    }
+  }
+  a.button {
+    display: block;
+    width: 53px;
+    height: 38px;
+    background: #007afe;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: #ffffff;
+    font-weight: normal;
+    line-height: 17px;
+  }
+</style>
+
+<script>
+  var x = document.getElementById("demo");
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+  }
+
+  function showPosition(position) {
+    x.innerHTML =
+      "Latitude: " +
+      position.coords.latitude +
+      "<br>Longitude: " +
+      position.coords.longitude;
+  }
+</script>
+
+<div class="sidebar">
+  <div class="sidebar">
+    <a id="general" href="/settings/general">General</a>
+    <a id="updatepassword" href="/settings/update-password">Update Password</a>
+    <a id="delete-account" href="/settings/delete-account"
+      >Delete User Account</a
+    >
+  </div>
+</div>
+<br />
+<h2>General Account Settings</h2>
+<br />
+<table class="table table-striped">
+  <tbody>
+    <tr>
+      <th scope="row">Profile Picture</th>
+      <td>
+        <img
+          src="{{ url_for('static', filename='profilepicture.jpg') }}"
+          alt="Admin"
+          class="rounded-circle"
+          width="50" />
+      </td>
+      <td></td>
+      <td>
+        <a href="" class="button">Edit</a>
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">Name</th>
+      <td>{{first_name}} {{last_name}}</td>
+      <td></td>
+      <td>
+        <a href="/settings/edit-name" class="button">Edit</a>
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">Username</th>
+      <td>{{username}}</td>
+      <td></td>
+      <td>
+        {% if not current_user.is_doctor %}
+        <a href="/settings/edit-username" class="button">Edit</a>
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">Email</th>
+      <td>{{email}}</td>
+      <td></td>
+      <td>
+        <a href="/settings/edit-email" class="button">Edit</a>
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">User location</th>
+      <td>{{location}}</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th scope="row"></th>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+{% endblock %}

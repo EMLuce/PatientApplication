@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+<title>{% block title %}Delete Account{% endblock %}</title>
+
+{% block content %}
+
+<style>
+  .sidebar {
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: #343a40;
+    position: absolute;
+    left: 0;
+    height: 100%;
+    overflow: auto;
+  }
+  .sidebar a {
+    display: block;
+    color: #ffffff;
+    padding: 16px;
+    text-decoration: none;
+  }
+
+  .sidebar a.active {
+    background-color: #343a40;
+    color: white;
+  }
+
+  .sidebar a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+  }
+
+  div.content {
+    margin-left: 200px;
+    padding: 1px 16px;
+    height: 1000px;
+  }
+
+  @media screen and (max-width: 700px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+    .sidebar a {
+      float: left;
+    }
+    div.content {
+      margin-left: 0;
+    }
+  }
+
+  @media screen and (max-width: 400px) {
+    .sidebar a {
+      text-align: center;
+      float: none;
+    }
+  }
+  a.button {
+    display: block;
+    width: 77px;
+    height: 38px;
+    background: #007afe;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: #ffffff;
+    font-weight: normal;
+    line-height: 17px;
+  }
+</style>
+
+<div class="sidebar">
+  <div class="sidebar">
+    <a id="general" href="/settings/general">General</a>
+    <a id="security-and-login" href="/settings/update-password"
+      >Update Password</a
+    >
+    <a id="delete-account" href="/settings/delete-account"
+      >Delete User Account</a
+    >
+  </div>
+</div>
+
+<form method="post">
+  <br />
+  <h2>Delete Account</h2>
+  <br />
+  <div class="'form-group">
+    <label for="email">Email Address</label>
+    <input
+      type="email"
+      class="form-control"
+      id="email"
+      name="email"
+      placeholder="Enter email"
+    />
+  </div>
+  <br />
+  <div class="'form-group">
+    <label for="password">Current password</label>
+    <input
+      type="password"
+      class="form-control"
+      id="password"
+      name="password"
+      placeholder="Enter Password"
+    />
+  </div>
+  <br />
+  <div class="'form-group">
+    <label for="password2">Re-type current password</label>
+    <input
+      type="password"
+      class="form-control"
+      id="password2"
+      name="password2"
+      placeholder="Enter Password"
+    />
+  </div>
+  <br />
+  <button type="submit" class="btn btn-primary">Submit</button>
+  <br />
+  <br />
+  <a href="/settings/general" class="button">Back</a>
+</form>
+<br />
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+<title>{% block title %}Home{% endblock %}</title>
+
+{% block content %}
+
+<style>
+  body {
+    background: #343a40;
+  }
+  .content-box {
+    background-color: rgb(255, 255, 255);
+    width: 100%;
+    border: 2px solid #626262;
+    display: inline-block;
+  }
+  .content-box-1 {
+    background-color: rgb(255, 255, 255);
+    width: 50%;
+    border: 2px solid #626262;
+    float: left;
+  }
+  .h2-header {
+    text-align: center;
+  }
+  .h5-header {
+    text-align: center;
+  }
+  .p-description {
+    text-align: center;
+  }
+  .p-aboutus {
+    padding: 8px;
+  }
+</style>
+
+<div class="content-box">
+  <div class="content-box">
+    <form method="post">
+      <h2 class="h2-header">Appointments</h2>
+      <div class="form-group">
+        <p class="p-description">
+          Stay up to date with your appointments and scheduled changes.
+        </p>
+        {% if current_user.is_doctor %}
+        <a href="/doctor-profile/appointments"
+          ><p class="p-description">
+            You currently have <b>({{count}})</b> scheduled Appointment(s).
+          </p>
+        </a>
+        {% elif not current_user.is_doctor %}
+        <a href="/profile/appointments"
+          ><p class="p-description">
+            You currently have <b>({{count}})</b> Appointment(s).
+          </p>
+        </a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+<div class="content-box">
+  <div class="content-box">
+    <form method="post">
+      <h2 class="h2-header">Support</h2>
+      <div class="form-group">
+        <p class="p-description">
+          Please contact our IT support Organizational Mailbox (OMB) for any
+          concerns.
+        </p>
+        <a href="mailto: lucedeveloper@gmail.com"
+          ><p class="p-description">Organizational Mailbox</p>
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="content-box-1">
+  <div class="content-box">
+    <form method="post">
+      <h2 class="h2-header">About Us</h2>
+      <div class="form-group">
+        <p class="p-aboutus">
+          CapTeam5 inc. is determined to develope a web application that allows
+          all users to easily schedule appointments with their primary care
+          providers. CapTeam5 was built and is now managed by a team of five
+          software developers who are progressively increasing the programs
+          capabilities! Our diversified range of services allow for continual
+          improvments to the user experience and general public!
+        </p>
+        <br />
+      </div>
+    </form>
+  </div>
+</div>
+<div class="content-box-1">
+  <div class="content-box">
+    <form method="post">
+      <h2 class="h2-header">Health Statistics</h2>
+      <div class="form-group">
+        <br />
+        <h5 class="h5-header">Body Mass Index (BMI)</h5>
+        <p class="p-description">{{"%.2f" % bmi}}</p>
+        <p class="p-description">{{range}}</p>
+        <a
+          href="https://www.cdc.gov/healthyweight/assessing/bmi/adult_bmi/index.html"
+          ><p class="p-description">Centers for Disease Control (About BMI)</p>
+        </a>
+        <br />
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

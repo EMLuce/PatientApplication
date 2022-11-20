@@ -1,0 +1,336 @@
+{% extends "base.html" %}
+<title>{% block title %}Appointments{% endblock %}</title>
+
+{% block content %}
+
+<script>
+  function deleteAppointments(appointmentsId) {
+    fetch("/delete-appointments", {
+      method: "POST",
+      body: JSON.stringify({ appointmentsId: appointmentsId }),
+    }).then((_res) => {
+      window.location.href = "/profile/appointments";
+    });
+  }
+</script>
+
+<style>
+  body {
+    margin-top: 0px;
+    background: #343a40;
+  }
+  .header {
+    align-content: center;
+    color: rgb(255, 255, 255);
+  }
+  .text {
+    align-content: center;
+    color: rgb(0, 0, 0);
+  }
+  .profile-header {
+    position: relative;
+    background-position: center;
+    overflow: hidden;
+  }
+
+  .profile-header .profile-header-cover {
+    margin-top: 5px;
+    background-color: #ffffff;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+
+  .profile-header .profile-header-cover:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 0,
+      rgba(0, 0, 0, 0.75) 100%
+    );
+  }
+
+  .profile-header .profile-header-content {
+    color: #fff;
+    padding: 25px;
+  }
+
+  .profile-header-img {
+    float: left;
+    width: 120px;
+    height: 120px;
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+    margin: 0 0 -20px;
+    padding: 3px;
+    border-radius: 4px;
+    background: rgb(31, 30, 30);
+  }
+
+  .profile-header-img img {
+    max-width: 100%;
+  }
+
+  .profile-header-info {
+    font-weight: 400;
+    color: rgb(31, 30, 30);
+  }
+
+  .profile-header-img + .profile-header-info {
+    margin-left: 140px;
+    font-weight: 500;
+    color: rgb(31, 30, 30);
+  }
+
+  .profile-header .profile-header-content,
+  .profile-header .profile-header-tab {
+    position: relative;
+  }
+
+  .profile-header .profile-header-tab {
+    background: #fff;
+    list-style-type: none;
+    margin: -10px 0 0;
+    padding: 0 0 0 140px;
+    white-space: nowrap;
+    border-radius: 0;
+  }
+  .profile-header .profile-header-tab > li {
+    display: inline-block;
+    margin: 0;
+  }
+  #yesAnswer {
+    display: none;
+  }
+  #yes:checked ~ #yesAnswer {
+    display: block;
+  }
+  .profile-header .profile-header-tab > li > a {
+    display: block;
+    color: rgb(31, 30, 30);
+    line-height: 20px;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 12px;
+    border: none;
+  }
+  .content-box {
+    background-color: rgb(255, 255, 255);
+    width: 1080px;
+  }
+</style>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div id="content" class="content content-full-width">
+        <!-- begin profile -->
+        <div class="profile">
+          <div class="profile-header">
+            <!-- BEGIN profile-header-cover -->
+            <div class="profile-header-cover"></div>
+            <!-- END profile-header-cover -->
+            <!-- BEGIN profile-header-content -->
+            <div class="profile-header-content">
+              <!-- BEGIN profile-header-img -->
+              <div class="profile-header-img">
+                <img
+                  src="{{ url_for('static', filename='profilepicture.jpg') }}"
+                  alt="" />
+              </div>
+              <!-- END profile-header-img -->
+              <!-- BEGIN profile-header-info -->
+              <div class="profile-header-info">
+                <p class="m-b-10">&nbsp</p>
+                <h5 class="m-b-10">{{first_name}} {{last_name}}</h5>
+                <p class="m-b-10">&nbsp</p>
+              </div>
+              <!-- END profile-header-info -->
+            </div>
+            <!-- END profile-header-content -->
+            <!-- BEGIN profile-header-tab -->
+            <ul class="profile-header-tab nav nav-tabs">
+              <li class="nav-item">
+                <a href="/profile/appointments" class="nav-link_"
+                  ><u>Appointments</u></a
+                >
+              </li>
+              <li class="nav-item">
+                <a href="/profile/health-data" class="nav-link_">Health Data</a>
+              </li>
+              <li class="nav-item">
+                <a href="/settings/general" class="nav-link_">Edit Profile</a>
+              </li>
+            </ul>
+            <!-- END profile-header-tab -->
+          </div>
+          <!-- end profile -->
+        </div>
+        <div class="content-box">
+          <form method="post">
+            <table class="table table-striped">
+              <tbody>
+                <tr>
+                  <th scope="row">
+                    <u><h5>Appointment Form</h5></u>
+                  </th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <!-- begin primary care provider -->
+                <tr>
+                  <th scope="row">Primary Care Provider</th>
+                  <td>
+                    <select id="primary-doctor" name="primary-doctor" required>
+                      <option value=""></option>
+                      <option value="drluce">Dr. Luce</option>
+                      <option value="drsmith">Dr. Smith</option>
+                      <option value="drjohnson">Dr. Johnson</option>
+                      <option value="dryoung">Dr. Young</option>
+                    </select>
+                  </td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <!-- end primary care provider -->
+                <!-- begin date -->
+                <tr>
+                  <th scope="row">Appointment Date</th>
+                  <td>
+                    <input id="date" type="date" name="date" required />
+                  </td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <!-- end date -->
+                <!-- begin time -->
+                <tr>
+                  <th scope="row">Appointment Time</th>
+                  <td>
+                    <select id="time" name="time" required>
+                      <option value=""></option>
+                      <option value="08:00am">08:00am</option>
+                      <option value="08:30am">08:30am</option>
+                      <option value="09:00am">09:00am</option>
+                      <option value="09:30am">09:30am</option>
+                      <option value="10:00am">10:00am</option>
+                      <option value="10:30am">10:30am</option>
+                      <option value="11:00am">11:00am</option>
+                      <option value="11:30am">11:30am</option>
+                      <option value="1:00pm">1:00pm</option>
+                      <option value="1:30pm">1:30pm</option>
+                      <option value="2:00pm">2:00pm</option>
+                      <option value="2:30pm">2:30pm</option>
+                      <option value="3:00pm">3:00pm</option>
+                      <option value="3:30pm">3:30pm</option>
+                      <option value="4:00pm">4:00pm</option>
+                      <option value="4:30pm">4:30pm</option>
+                      <option value="5:30pm">5:00pm</option>
+                    </select>
+                  </td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <!-- end time -->
+                <!-- begin questionare -->
+                <tr>
+                  <th scope="row">
+                    Do you have any concerns for your upcoming appointment?
+                  </th>
+                  <td>
+                    <input type="radio" id="yes" name="answer" value="yes" />
+                    Yes
+                    <input
+                      type="radio"
+                      id="no"
+                      name="answer"
+                      checked="checked"
+                      value="no" />No
+                    <br />
+                    <br />
+                    <input
+                      type="text"
+                      id="yesAnswer"
+                      name="yesAnswer"
+                      placeholder="Please Provide Details" />
+                  </td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <!-- end questionare -->
+                <!-- begin submit button -->
+                <tr>
+                  <td>
+                    <input
+                      type="submit"
+                      class="btn btn-primary"
+                      name="action"
+                      value="Schedule appointment" />
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <!-- begin submit button -->
+              </tbody>
+            </table>
+          </form>
+          <!-- begin appointments -->
+        </div>
+        <div>
+          <div class="content-box">
+            <table class="table table-striped">
+              <tr>
+                <th scope="row">
+                  <u><h5>Scheduled Appointments</h5></u>
+                </th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">Contact Email</th>
+                <th scope="row">Primary Care Provider</th>
+                <th scope="row">Appointment Date</th>
+                <th scope="row">Appointment Time</th>
+                <th scope="row"></th>
+              </tr>
+              {%for appointments in user.appointments%}
+              <tr>
+                <td>{{appointments.email}}</td>
+                <td>{{appointments.doctor}}</td>
+                <td>{{appointments.date}}</td>
+                <td>{{appointments.time}}</td>
+                <td>
+                  <input
+                    type="submit"
+                    class="btn btn-primary"
+                    value="Cancel"
+                    onClick="deleteAppointments({{ appointments.id }})" />
+                </td>
+              </tr>
+              {% endfor %}
+            </table>
+            <!-- end appointments -->
+          </div>
+        </div>
+      </div>
+      <br />
+    </div>
+  </div>
+</div>
+{% endblock %}

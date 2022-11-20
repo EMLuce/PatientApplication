@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+<title>{% block title %}Appointments{% endblock %}</title>
+
+{% block content %}
+
+<script>
+  function deleteAppointments(appointmentsId) {
+    fetch("/delete-appointments", {
+      method: "POST",
+      body: JSON.stringify({ appointmentsId: appointmentsId }),
+    }).then((_res) => {
+      window.location.href = "/doctor-profile/appointments";
+    });
+  }
+</script>
+
+<style>
+  body {
+    margin-top: 0px;
+    background: #343a40;
+  }
+  .header {
+    align-content: center;
+    color: rgb(255, 255, 255);
+  }
+  .text {
+    align-content: center;
+    color: rgb(0, 0, 0);
+  }
+  .profile-header {
+    position: relative;
+    background-position: center;
+    overflow: hidden;
+  }
+
+  .profile-header .profile-header-cover {
+    margin-top: 5px;
+    background-color: #ffffff;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+
+  .profile-header .profile-header-cover:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 0,
+      rgba(0, 0, 0, 0.75) 100%
+    );
+  }
+
+  .profile-header .profile-header-content {
+    color: #fff;
+    padding: 25px;
+  }
+
+  .profile-header-img {
+    float: left;
+    width: 120px;
+    height: 120px;
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+    margin: 0 0 -20px;
+    padding: 3px;
+    border-radius: 4px;
+    background: rgb(31, 30, 30);
+  }
+
+  .profile-header-img img {
+    max-width: 100%;
+  }
+
+  .profile-header-info {
+    font-weight: 400;
+    color: rgb(31, 30, 30);
+  }
+
+  .profile-header-img + .profile-header-info {
+    margin-left: 140px;
+    font-weight: 500;
+    color: rgb(31, 30, 30);
+  }
+
+  .profile-header .profile-header-content,
+  .profile-header .profile-header-tab {
+    position: relative;
+  }
+
+  .profile-header .profile-header-tab {
+    background: #fff;
+    list-style-type: none;
+    margin: -10px 0 0;
+    padding: 0 0 0 140px;
+    white-space: nowrap;
+    border-radius: 0;
+  }
+  .profile-header .profile-header-tab > li {
+    display: inline-block;
+    margin: 0;
+  }
+  #yesAnswer {
+    display: none;
+  }
+  #yes:checked ~ #yesAnswer {
+    display: flex;
+  }
+  .profile-header .profile-header-tab > li > a {
+    display: block;
+    color: rgb(31, 30, 30);
+    line-height: 20px;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 12px;
+    border: none;
+  }
+  .content-box {
+    background-color: rgb(255, 255, 255);
+    width: 1080px;
+  }
+</style>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div id="content" class="content content-full-width">
+        <!-- begin profile -->
+        <div class="profile">
+          <div class="profile-header">
+            <!-- BEGIN profile-header-cover -->
+            <div class="profile-header-cover"></div>
+            <!-- END profile-header-cover -->
+            <!-- BEGIN profile-header-content -->
+            <div class="profile-header-content">
+              <!-- BEGIN profile-header-img -->
+              <div class="profile-header-img">
+                <img
+                  src="{{ url_for('static', filename='profilepicture.jpg') }}"
+                  alt="" />
+              </div>
+              <!-- END profile-header-img -->
+              <!-- BEGIN profile-header-info -->
+              <div class="profile-header-info">
+                <p class="m-b-10">&nbsp</p>
+                <h5 class="m-b-10">Dr. {{first_name}} {{last_name}}</h5>
+                <p class="m-b-10">&nbsp</p>
+              </div>
+              <!-- END profile-header-info -->
+            </div>
+            <!-- END profile-header-content -->
+            <!-- BEGIN profile-header-tab -->
+            <ul class="profile-header-tab nav nav-tabs">
+              <li class="nav-item">
+                <a href="/doctor-profile/appointments" class="nav-link_"
+                  ><u>My Appointments</u></a
+                >
+              </li>
+              <li class="nav-item">
+                <a href="/doctor-profile/patient-search" class="nav-link_"
+                  >Patient Search</a
+                >
+              </li>
+              <li class="nav-item">
+                <a href="/settings/general" class="nav-link_">Edit Profile</a>
+              </li>
+            </ul>
+            <!-- END profile-header-tab -->
+          </div>
+          <!-- end profile -->
+        </div>
+        <div class="content-box">
+          <table class="table table-striped">
+            <body>
+              <tr>
+                <th scope="row" width="1%">ID</th>
+                <th scope="row" width="15%">Patient</th>
+                <th scope="row" width="15%">Date</th>
+                <th scope="row" width="5%">Time</th>
+                <th scope="row" width="100%">Patient Concerns</th>
+                <th scope="row" width="5%"></th>
+                <th scope="row" width="5%"></th>
+              </tr>
+              <!-- end appointments -->
+              {%for appointments in appointments%} {% if appointments.doctor ==
+              current_user.user_name %}
+              <tr>
+                <td>{{appointments.id}}</td>
+                <td>{{appointments.first_name}} {{appointments.last_name}}</td>
+                <td>{{appointments.date}}</td>
+                <td>{{appointments.time}}</td>
+                <td>{{appointments.patient_concerns}}</td>
+                <td></td>
+                <td>
+                  <input
+                    type="submit"
+                    class="btn btn-primary"
+                    value="Cancel"
+                    onClick="deleteAppointments({{ appointments.id }})" />
+                </td>
+              </tr>
+              {% endif %} {% endfor %}
+            </body>
+          </table>
+          <!-- end appointments -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
